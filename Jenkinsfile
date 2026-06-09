@@ -56,6 +56,7 @@ pipeline {
 
             steps {
                 sh '''
+                    echo "E2E Testing Stage"
                     npm i -g serve
                     serve -s build
                     npm run test:e2e
