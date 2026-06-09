@@ -61,10 +61,13 @@ pipeline {
             }
 
             steps {
+                /*  use '&' at the back to make it run in the background (kinda like async)
+                   wait for 10 secs 
+                */
                 sh '''
                     echo "E2E Testing Stage"
-                    npm i serve
-                    node_modules/.bin/serve -s build
+                    node_modules/.bin/serve -s build &
+                    sleep 10
                     npm run test:e2e
                 '''
             }
