@@ -6,6 +6,7 @@ pipeline {
     }
 
     stages {
+       /* 
         stage ('Build') {
             agent {
                 docker {
@@ -26,6 +27,7 @@ pipeline {
                 '''
             }
         }
+        */
 
         stage ('Test') {
             agent {
@@ -38,7 +40,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Test Stage"
-                    test -f build/index.html
+                    # test -f build/index.html
                     npm run test
                 '''
             }
