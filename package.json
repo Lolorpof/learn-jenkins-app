@@ -17,7 +17,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --testResultsProcessor=\"jest-junit\"",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --reporter=html",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
