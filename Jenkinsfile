@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        NAME='duangjun'
+        // need to be this exact name
+        NETLIFY_SITE_ID = '1283706e-767d-4aa8-918e-467ac0e38873'
     }
 
     stages {
@@ -100,6 +101,7 @@ pipeline {
                 sh '''
                     npm i netlify-cli
                     node_modules/.bin/netlify --version
+                    echo "deploying to prod. Site Id: $NETLIFY_SITE_ID"
                 '''
             }
         }
