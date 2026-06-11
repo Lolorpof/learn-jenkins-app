@@ -19,6 +19,7 @@ pipeline {
 
             steps {
                 sh '''
+                    echo "Test SCM Polling Build"
                     echo "Build Stage" 
                     ls -la
                     node --version
