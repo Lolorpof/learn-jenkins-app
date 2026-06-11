@@ -19,7 +19,6 @@ pipeline {
 
             steps {
                 sh '''
-                    echo "Test SCM Polling Build"
                     echo "Build Stage" 
                     ls -la
                     node --version
@@ -107,6 +106,39 @@ pipeline {
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy --dir=build --prod --no-build
                 '''
+            }
+        }
+
+        stage ('Prod E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                    /*
+                        running as root is not a good idea.
+                        this will make files inaccessible to normal users.
+                        also, security related stuff.
+                    */
+                    // args '-u root:root'
+                }
+            }
+
+            // env var only available in Prod E2E stage
+            environment {
+                CI_ENVIRONMENT_URL = 'https://superb-basbousa-2087ae.netlify.app'
+            }
+
+            steps {
+                sh '''
+                    echo "Prod E2E Testing Stage"
+                    npm run test:e2e
+                '''
+            }
+
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                }
             }
         }
         
