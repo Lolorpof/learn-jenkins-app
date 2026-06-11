@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // need to be this exact name
+        // 'NETLIFY' need to be these exact names
         NETLIFY_SITE_ID = '1283706e-767d-4aa8-918e-467ac0e38873'
+        NETLIFY_AUTH_TOKEN = credentials('netlify-token') // the same name as in the token name defined on jenkins web
     }
 
     stages {
@@ -102,6 +103,7 @@ pipeline {
                     npm i netlify-cli
                     node_modules/.bin/netlify --version
                     echo "deploying to prod. Site Id: $NETLIFY_SITE_ID"
+                    node_modules/.bin/netlify status
                 '''
             }
         }
