@@ -116,7 +116,7 @@ pipeline {
         stage ('Staging: Deploy & E2E') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    image 'mcr.microsoft.com/playwright:v1.43.1-jammy'
                     reuseNode true
                     /*
                         running as root is not a good idea.
@@ -165,7 +165,7 @@ pipeline {
         stage ('Prod: Deploy & E2E') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    image 'mcr.microsoft.com/playwright:v1.43.1-jammy'
                     reuseNode true
                     /*
                         running as root is not a good idea.
