@@ -110,6 +110,33 @@ pipeline {
             }
         }
 
+        stage ('Pause to Approve') {
+            steps {
+                timeout(time: 30, unit: 'MINUTES') {
+                    input message: 'Deploy to Production?', ok: 'Yes, deploy!'
+                }
+            }
+        }
+        
+        stage ('Deploy prod') {
+            agent {
+                docker { 
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+
+            steps {
+                sh '''
+                    npm i netlify-cli
+                    node_modules/.bin/netlify --version
+                    echo "deploying to prod. Site Id: $NETLIFY_SITE_ID"
+                    node_modules/.bin/netlify status
+                    node_modules/.bin/netlify deploy --dir=build --prod --no-build
+                '''
+            }
+        }
+
         stage ('Prod E2E') {
             agent {
                 docker {
@@ -143,25 +170,6 @@ pipeline {
             }
         }
 
-        stage ('Deploy prod') {
-            agent {
-                docker { 
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
-
-            steps {
-                sh '''
-                    npm i netlify-cli
-                    node_modules/.bin/netlify --version
-                    echo "deploying to prod. Site Id: $NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --prod --no-build
-                '''
-            }
-        }
-        
     }
     
     
