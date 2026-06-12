@@ -90,7 +90,7 @@ pipeline {
             }
         }
 
-        stage ('Deploy') {
+        stage ('Deploy staging') {
             agent {
                 docker { 
                     image 'node:18-alpine'
@@ -99,12 +99,13 @@ pipeline {
             }
 
             steps {
+                // no --prod flag in 'netlify deploy'
                 sh '''
                     npm i netlify-cli
                     node_modules/.bin/netlify --version
                     echo "deploying to prod. Site Id: $NETLIFY_SITE_ID"
                     node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --prod --no-build
+                    node_modules/.bin/netlify deploy --dir=build --no-build
                 '''
             }
         }
@@ -139,6 +140,25 @@ pipeline {
                 always {
                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright Prod Report', reportTitles: '', useWrapperFileDirectly: true])
                 }
+            }
+        }
+
+        stage ('Deploy prod') {
+            agent {
+                docker { 
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+
+            steps {
+                sh '''
+                    npm i netlify-cli
+                    node_modules/.bin/netlify --version
+                    echo "deploying to prod. Site Id: $NETLIFY_SITE_ID"
+                    node_modules/.bin/netlify status
+                    node_modules/.bin/netlify deploy --dir=build --prod --no-build
+                '''
             }
         }
         
