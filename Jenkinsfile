@@ -127,6 +127,11 @@ pipeline {
                 }
             }
 
+            // need to declare this first before setting it in 'sh'
+            environment {
+                CI_ENVIRONMENT_URL = 'STAGING_URL_PLACEHOLDER'
+            }
+
             steps {
                 sh '''
                     echo "Deploy Staging & Staging E2E Testing Stage"
