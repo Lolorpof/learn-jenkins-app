@@ -116,7 +116,7 @@ pipeline {
         stage ('Staging: Deploy & E2E') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.46.0-jammy'
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
                     reuseNode true
                     /*
                         running as root is not a good idea.
@@ -142,7 +142,7 @@ pipeline {
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy --dir=build --no-build --json > deploy-output.json
 
-                    CI_ENVIRONMENT_URL = $(node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json)
+                    CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json)
                     npm run test:e2e
                 '''
             }
@@ -165,7 +165,7 @@ pipeline {
         stage ('Prod: Deploy & E2E') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.46.0-jammy'
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
                     reuseNode true
                     /*
                         running as root is not a good idea.
