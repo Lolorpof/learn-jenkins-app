@@ -135,6 +135,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Deploy Staging & Staging E2E Testing Stage"
+                    node --version
                     npm i netlify-cli node-jq
                     node_modules/.bin/netlify --version
                     echo "deploying to prod. Site Id: $NETLIFY_SITE_ID"
