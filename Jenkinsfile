@@ -5,6 +5,8 @@ pipeline {
         // 'NETLIFY' need to be these exact names
         NETLIFY_SITE_ID = '1283706e-767d-4aa8-918e-467ac0e38873'
         NETLIFY_AUTH_TOKEN = credentials('netlify-token') // the same name as in the token name defined on jenkins web
+
+        REACT_APP_VERSION = '1.2'
     }
 
     stages {
@@ -154,14 +156,6 @@ pipeline {
             }
         }
 
-        stage ('Pause to Approve') {
-            steps {
-                timeout(time: 30, unit: 'MINUTES') {
-                    input message: 'Deploy to Production?', ok: 'Yes, deploy!'
-                }
-            }
-        }
-        
         stage ('Prod: Deploy & E2E') {
             agent {
                 docker {
