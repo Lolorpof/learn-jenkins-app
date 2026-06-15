@@ -143,7 +143,7 @@ pipeline {
                     netlify status
                     netlify deploy --dir=build --no-build --json > deploy-output.json
 
-                    CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' deploy-output.json)
+                    CI_ENVIRONMENT_URL=$(jq -r '.deploy_url' deploy-output.json)
                     npm run test:e2e
                 '''
             }
