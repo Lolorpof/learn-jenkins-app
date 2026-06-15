@@ -124,7 +124,7 @@ pipeline {
         stage ('Staging: Deploy & E2E') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    image 'my-playwright'
                     reuseNode true
                     /*
                         running as root is not a good idea.
@@ -144,13 +144,12 @@ pipeline {
                 sh '''
                     echo "Deploy Staging & Staging E2E Testing Stage"
                     node --version
-                    npm i netlify-cli node-jq
-                    node_modules/.bin/netlify --version
+                    netlify --version
                     echo "deploying to prod. Site Id: $NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --no-build --json > deploy-output.json
+                    netlify status
+                    netlify deploy --dir=build --no-build --json > deploy-output.json
 
-                    CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json)
+                    CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' deploy-output.json)
                     npm run test:e2e
                 '''
             }
@@ -165,7 +164,7 @@ pipeline {
         stage ('Prod: Deploy & E2E') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    image 'my-playwright'
                     reuseNode true
                     /*
                         running as root is not a good idea.
@@ -185,11 +184,10 @@ pipeline {
                 sh '''
                     echo "Deploy Prod & Prod E2E Testing Stage"
                     node --version
-                    npm i netlify-cli
-                    node_modules/.bin/netlify --version
+                    netlify --version
                     echo "deploying to prod. Site Id: $NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --prod --no-build
+                    netlify status
+                    netlify deploy --dir=build --prod --no-build
                     npm run test:e2e
                 '''
             }
