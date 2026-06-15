@@ -66,7 +66,7 @@ pipeline {
                 stage ('E2E') {
                     agent {
                         docker {
-                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            image 'my-playwright'
                             reuseNode true
                             /*
                                 running as root is not a good idea.
@@ -83,7 +83,7 @@ pipeline {
                         */
                         sh '''
                             echo "E2E Testing Stage"
-                            node_modules/.bin/serve -s build &
+                            serve -s build &
                             sleep 10
                             npm run test:e2e
                         '''
